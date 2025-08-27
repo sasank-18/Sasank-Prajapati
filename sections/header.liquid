@@ -80,6 +80,14 @@
   .header {
     padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
   }
+  
+  .header__custom-text {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: auto;
+  margin-right: auto;
+}
 
   .section-header {
     position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
@@ -180,15 +188,24 @@
       {%- endif -%}
     {%- endif -%}
 
-    {%- liquid
-      if section.settings.menu != blank
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
+    {% comment %}
+      {%- liquid
+        if section.settings.menu != blank
+          if section.settings.menu_type_desktop == 'dropdown'
+            render 'header-dropdown-menu'
+          elsif section.settings.menu_type_desktop != 'drawer'
+            render 'header-mega-menu'
+          endif
         endif
-      endif
-    %}
+      %}
+    {% endcomment %}
+
+    {% comment %} custom text added below {% endcomment %}
+    {%- if section.settings.custom_text != blank -%}
+      <div class="header__custom-text">
+        {{ section.settings.custom_text }}
+      </div>
+    {%- endif -%}
 
     {%- if section.settings.logo_position == 'middle-center' -%}
       {%- if request.page_type == 'index' -%}
@@ -539,6 +556,13 @@
       "default": "dropdown",
       "label": "t:sections.header.settings.menu_type_desktop.label"
     },
+    {
+      "type": "text",
+      "id": "custom_text",
+      "label": "Header Custom Text",
+      "default": "Your text here"
+    },
+
     {
       "type": "select",
       "id": "sticky_header_type",
